@@ -7,12 +7,18 @@
   - [Initial Configuration](#initial-configuration)
     - [Installing Docker and Docker-Compose](#installing-docker-and-docker-compose)
     - [Creating Docker Image for ROS robot](#creating-docker-image-for-ros-robot)
+    - [Install Prometheus, Node-Exporter and Pushgateway](#install-prometheus-node-exporter-and-pushgateway)
+    - [Install Grafana](#install-grafana)
+  - [Executing the experiment](#executing-the-experiment)
+    - [Run ROS simulation](#run-ros-simulation)
+    - [Run metrics crawler](#run-metrics-crawler)
 
 ## Overview
 
 This is my final paper for my graduation on Control and Automation Engineering at UNICAMP, with the purpose of developing a virtual environment for a robot embedded system with monitor and security strategies.
 
 TODO: gif/pictures of the results
+
 TODO: pictures of the base architecture
 
 ## Initial Configuration
@@ -133,4 +139,26 @@ sudo systemctl start grafana-server
 sudo systemctl status grafana-server
 ```
 
-## Getting started
+## Executing the experiment
+
+### Run ROS simulation
+
+Enter on `./apps/ros2_docker_examples` and execute the following command to bring it up the turtlesim simulaton:
+
+```bash
+sudo docker run --rm -it --env DISPLAY --volume /tmp/.X11-unix:/tmp/.X11-unix:rw turtle_demo ros2 launch my_turtle_bringup turtlesim_demo.launch.py >> output.txt
+```
+
+In another terminal window, to retrieve the simulated robot position, run:
+
+```bash
+sudo docker run --rm -it --env DISPLAY --volume /tmp/.X11-unix:/tmp/.X11-unix:rw turtle_demo ros2 topic echo /turtle1/pose >> position.txt
+```
+
+### Run metrics crawler
+
+Enter on the root of this repository `./` and execute the index file to retrive the custom metrics of thr ROS simulation:
+
+```bash
+node index.js
+```
