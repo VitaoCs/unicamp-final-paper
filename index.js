@@ -1,5 +1,4 @@
-const fs = require('fs')
-const eventStream = require('event-stream')
+const Tail = require('tail').Tail
 const axios = require('axios')
 const POSITION_FILE_PATH = `${process.env.PWD}/apps/ros2_docker_examples/position.txt`
 const ROS_OUTPUT_FILE_PATH = `${process.env.PWD}/apps/ros2_docker_examples/output.txt`
@@ -74,7 +73,7 @@ const sendToWithDelay = async ({
 				console.error('Erros with axios request.')
 			}
 			resolve()
-		},delay);
+		}, delay);
 	})
 }
 
@@ -139,46 +138,27 @@ const treatOperationLine = async (line) => {
 	}
 }
 
-// Reads position file to check ROS screen location
-const createPositionStream = async () => new Promise((resolve, reject) => {
-	const positionStream = fs.createReadStream(POSITION_FILE_PATH)
-		.pipe(eventStream.split())
-		.pipe(eventStream.mapSync( async (line) => {
-			positionStream.pause()
-			await treatPositionLine(line)
-			positionStream.resume()
-		})
-			.on('error', (err) => {
-				console.error('[positionStream] Error while reading file.')
-			})
-			.on('end', () => {
-				console.log('[positionStream] Read entire file.')
-				resolve()
-			}))
-})
-
-// Reads output file from ROS execution for health checker
-const createOutputOperationStream = () => new Promise((resolve, reject) => {
-	const outputOperationStream = fs.createReadStream(ROS_OUTPUT_FILE_PATH)
-		.pipe(eventStream.split())
-		.pipe(eventStream.mapSync( async (line) => {
-			outputOperationStream.pause()
-			await treatOperationLine(line)
-			outputOperationStream.resume()
-		})
-			.on('error', (err) => {
-				console.error('[outputOperationStream] Error while reading file.')
-			})
-			.on('end', () => {
-				console.log('[outputOperationStream] Read entire file.')
-				resolve()
-			}))
-})
-
 const main = async () => {
-	const positionStreamPromise = createPositionStream()
-	const outputOperationStreamPromise = createOutputOperationStream()
-	await Promise.all([positionStreamPromise, outputOperationStreamPromise])
+	const outputTail = new Tail(ROS_OUTPUT_FILE_PATH);
+	const positionTail = new Tail(POSITION_FILE_PATH);
+
+	// Reads output file from ROS execution for health checker
+	outputTail.on('line', async function (data) {
+		await treatOperationLine(data)
+	});
+	outputTail.on('error', function (error) {
+		console.error('[outputOperationStream] Error while reading file: ', error)
+	});
+
+	// Reads position file to check ROS screen location
+	positionTail.on('line', async function (data) {
+		await treatPositionLine(data)
+	});
+	positionTail.on('error', function (error) {
+		console.error('[positionStream] Error while reading file: ', error)
+	});
+
+	console.log('Tails created!')
 }
 
 main()
