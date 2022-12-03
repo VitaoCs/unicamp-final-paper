@@ -17,10 +17,6 @@
 
 This is my final paper for my graduation on Control and Automation Engineering at UNICAMP, with the purpose of developing a virtual environment for a robot embedded system with monitor and security strategies.
 
-TODO: gif/pictures of the results
-
-TODO: pictures of the base architecture
-
 ## Initial Configuration
 
 Make sure to update your system dependencies:
@@ -139,6 +135,13 @@ sudo systemctl start grafana-server
 sudo systemctl status grafana-server
 ```
 
+### Install NGROK
+
+Install ngrok dependency globally to be used on this project. Follow the steps to configure in []()
+```bash
+sudo snap install ngrok
+```
+
 ## Executing the experiment
 
 ### Run ROS simulation
@@ -162,3 +165,5 @@ Enter on the root of this repository `./` and execute the index file to retrive 
 ```bash
 node index.js
 ```
+
+This app also expose an external URL to be acessed outside your network (localhost)

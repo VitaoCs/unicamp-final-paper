@@ -1,54 +1,18 @@
+const ngrok = require('ngrok')
 const Tail = require('tail').Tail
 const axios = require('axios')
-const POSITION_FILE_PATH = `${process.env.PWD}/apps/ros2_docker_examples/position.txt`
-const ROS_OUTPUT_FILE_PATH = `${process.env.PWD}/apps/ros2_docker_examples/output.txt`
-const PUSHGATEWAY_INSTANCE = 'http://localhost:9091/metrics'
-const GRAFANA_SCRAPE_INTERVAL_POSITION = 100
-const GRAFANA_SCRAPE_INTERVAL_OUTPUT = 1000
-const METRICS_TO_PUSHGATEWAY = {
-	x: {
-		job: 'turtlesim',
-		instance: 'position',
-		metric: 'x_position',
-		delay: GRAFANA_SCRAPE_INTERVAL_POSITION
-	},
-	y: {
-		job: 'turtlesim',
-		instance: 'position',
-		metric: 'y_position',
-		delay: GRAFANA_SCRAPE_INTERVAL_POSITION
-	},
-	theta: {
-		job: 'turtlesim',
-		instance: 'position',
-		metric: 'theta_position',
-		delay: GRAFANA_SCRAPE_INTERVAL_POSITION
-	},
-	linear_velocity: {
-		job: 'turtlesim',
-		instance: 'position',
-		metric: 'linear_velocity',
-		delay: GRAFANA_SCRAPE_INTERVAL_POSITION
-	},
-	angular_velocity: {
-		job: 'turtlesim',
-		instance: 'position',
-		metric: 'angular_velocity',
-		delay: GRAFANA_SCRAPE_INTERVAL_POSITION
-	},
-	start: {
-		job: 'turtlesim',
-		instance: 'operation',
-		metric: 'start',
-		delay: GRAFANA_SCRAPE_INTERVAL_OUTPUT
-	},
-	collision: {
-		job: 'turtlesim',
-		instance: 'operation',
-		metric: 'collision',
-		delay: GRAFANA_SCRAPE_INTERVAL_OUTPUT
-	}
-}
+const {
+	METRICS_TO_PUSHGATEWAY,
+    POSITION_FILE_PATH,
+    ROS_OUTPUT_FILE_PATH,
+    PUSHGATEWAY_INSTANCE
+} = require('./lib/constants')
+const { loadConfig } = require('./lib/config')
+const {
+	ngrokToken,
+	ngrokBaseAuth
+} = loadConfig()
+
 let collisionWasDetected = false
 
 /* 
@@ -138,7 +102,14 @@ const treatOperationLine = async (line) => {
 	}
 }
 
-const main = async () => {
+const createNgrokTunnel = async () => {
+	const url = await ngrok.connect({
+		authtoken: ngrokToken
+	})
+	console.log(`The ngrok tunnel url is: ${url}`)
+}
+
+const createTailsForROS = async () => {
 	const outputTail = new Tail(ROS_OUTPUT_FILE_PATH);
 	const positionTail = new Tail(POSITION_FILE_PATH);
 
@@ -159,6 +130,11 @@ const main = async () => {
 	});
 
 	console.log('Tails created!')
+}
+
+const main = async () => {
+	createTailsForROS()
+	createNgrokTunnel()
 }
 
 main()
