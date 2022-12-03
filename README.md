@@ -138,6 +138,7 @@ sudo systemctl status grafana-server
 ### Install NGROK
 
 Install ngrok dependency globally to be used on this project. Follow the steps to configure in []()
+
 ```bash
 sudo snap install ngrok
 ```
@@ -166,4 +167,4 @@ Enter on the root of this repository `./` and execute the index file to retrive 
 node index.js
 ```
 
-This app also expose an external URL to be acessed outside your network (localhost)
+This app also expose an external URL to be accessed outside your network (localhost). You NGROK data would be availible on <http://127.0.0.1:4040/inspect/http>
