@@ -9,6 +9,7 @@
     - [Creating Docker Image for ROS robot](#creating-docker-image-for-ros-robot)
     - [Install Prometheus, Node-Exporter and Pushgateway](#install-prometheus-node-exporter-and-pushgateway)
     - [Install Grafana](#install-grafana)
+    - [Install NGROK](#install-ngrok)
   - [Executing the experiment](#executing-the-experiment)
     - [Run ROS simulation](#run-ros-simulation)
     - [Run metrics crawler](#run-metrics-crawler)
@@ -142,6 +143,10 @@ Install ngrok dependency globally to be used on this project. Follow the steps t
 ```bash
 sudo snap install ngrok
 ```
+
+### Setup Grafana Dashboard
+
+Import the Grafana dashboard for this experience from `./grafana/dashboard.json`
 
 ## Executing the experiment
 
