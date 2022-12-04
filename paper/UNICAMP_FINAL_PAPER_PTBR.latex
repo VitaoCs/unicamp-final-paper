@@ -1,0 +1,678 @@
+\documentclass[letterpaper, 10pt]{article}
+\usepackage{graphicx,epsfig,psfrag,rotate}
+\usepackage{amsmath,amsfonts,amssymb,latexsym}
+\usepackage{setspace,enumerate,ifthen,subcaption}
+\usepackage{hyperref}
+\usepackage{siunitx}
+\usepackage[portuges]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[algo2e,english,onelanguage,algoruled]{algorithm2e}
+\usepackage[top=1.5in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{calrsfs}
+\renewcommand{\rmdefault}{pplx}
+\usepackage{eulervm}
+\DeclareMathAlphabet{\mathcal}{OMS}{zplm}{m}{n}
+\usepackage[final]{pdfpages}
+\usepackage{mathrsfs}
+\usepackage{multicol}
+\usepackage{ragged2e}
+\usepackage{amsthm}
+\usepackage{epigraph}
+\usepackage{biblatex}
+\usepackage{minted}
+
+\hypersetup{
+    bookmarks=true,         % show bookmarks bar?
+    unicode=false,          % non-Latin characters in Acrobat’s bookmarks
+    pdftoolbar=true,        % show Acrobat’s toolbar?
+    pdfmenubar=true,        % show Acrobat’s menu?
+    pdffitwindow=false,     % window fit to page when opened
+    pdfstartview={FitH},    % fits the width of the page to the window
+    pdftitle={My title},    % title
+    pdfauthor={Author},     % author
+    pdfsubject={Subject},   % subject of the document
+    pdfcreator={Creator},   % creator of the document
+    pdfproducer={Producer}, % producer of the document
+    pdfkeywords={keyword1} {key2} {key3}, % list of keywords
+    pdfnewwindow=true,      % links in new window
+    colorlinks=true,       % false: boxed links; true: colored links
+    linkcolor= black,          % color of internal links (change box color with linkbordercolor)
+    citecolor= black,        % color of links to bibliography
+    filecolor= black,      % color of file links
+    urlcolor= black           % color of external links
+}
+\newcolumntype{M}{>{\centering\arraybackslash}m{\dimexpr.25\linewidth-2\tabcolsep}}
+\newcommand{\Hdo}{{\cal H}_2}
+\newcommand{\Hoo}{{\cal H}_\infty}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\renewcommand{\S}{\mathbb{S}}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\T}{\mathrm{T}}
+\newcommand{\Tt}{\mathbb{T}}
+\newcommand{\tr}{\mathbf{tr}}
+\newcommand{\M}{\mathbb{M}}
+\newcommand{\G}{\mathbb{G}}
+\newcommand{\V}{\mathbb{V}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\W}{\mathbb{W}}
+\renewcommand{\d}{\mathsf{d}}
+\newtheorem{thm}{Teorema}[section]
+\newtheorem{cor}{Corolario}
+\newtheorem{dfn}{Definição}[section]
+\newtheorem{lem}{Lema}
+\newtheorem{eg}{Exemplo}
+\newtheorem{rem}{Observação}
+\newtheorem{prp}{Proposição}
+\setcounter{MaxMatrixCols}{20}
+\addbibresource{bibliography.bib}
+
+\def\defeq{\mathrel{\mathop:}=}
+\usepackage{float}
+
+
+\onehalfspace
+
+\begin{document}
+
+    \begin{titlepage}
+        \newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+        \center
+        \textsc{\huge Universidade Estadual de Campinas}\\[0.5cm] 
+        \textsc{\Large Faculdade de Engenharia Mecânica}\\[1.5cm] 
+        \includegraphics[scale=0.6]{images/FEM_preferencial.jpg}
+        \vfill
+        \textsc{\Large Relatório Final do Trabalho de Conclusão de Curso}\\ [1.5cm]
+        \HRule \\[0.5cm]
+        { \huge \bfseries Desenvolvimento de estratégias de segurança e monitoramento para sistemas embarcados provisionado em ambiente virtual}
+        \HRule \\[1.5cm]
+        \large\emph{Autor: Victor Cintra Santos}\\
+    
+        \large\emph{Orientador: Prof. Dr. Euripedes Guilherme de Oliveira Nobrega}\\[2cm]
+        
+        {\large \today}
+        
+    \end{titlepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\thispagestyle{empty}
+    \begin{center}
+        \textsc{\huge Universidade Estadual de Campinas}\\[0.5cm]
+        \textsc{\LARGE Faculdade de Engenharia Mecânica}\\[3.5cm]
+        
+        \textsc{\Large Relatório Final \\ Trabalho de Conclusão de Curso}\\ [2.5cm]
+        
+        \textsc{\Large Desenvolvimento de estratégias de segurança e monitoramento para sistemas embarcados provisionado em ambiente virtual }\\ [4cm]
+    \end{center}
+    
+    \flushleft
+        Autor: Victor Cintra Santos\\
+        Orientador: Prof. Dr. Euripedes Guilherme de Oliveira Nobrega \\[0.5cm]
+        
+        Curso: Engenharia de Controle e Automação
+        \\ [1cm]
+    
+    \begin{justify}
+        \par
+        Trabalho de conclusão de curso apresentado à Comissão de Graduação da Faculdade de Engenharia Mecânica, como requisito para a obtenção do título de Engenheiro de Controle e Automação. \\[1cm]
+    \end{justify}
+    
+    \begin{center}
+        Campinas, 2022 \\
+        São Paulo - Brasil
+    \end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+        \hfill
+        \thispagestyle{empty}
+        
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\pagenumbering{Roman}
+\setcounter{page}{1}
+
+    \hfill
+    \vfill
+    \begin{minipage}{.4\textwidth}
+        \hfill
+    \end{minipage}%
+    \begin{minipage}{0.6\textwidth}
+        Dedico este trabalho aos meus pais e ao meu irmão, os alicerces e os grandes responsáveis por viabilizarem minha formação e as conquistas na minha vida; aos amigos que sempre estiveram ao meu lado, eterna gratidão.
+    \end{minipage}
+    \vspace{9cm}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+
+    {\color{white} fill}
+    \vfill
+    \epigraph{Todos esses que aí estão atravancando meu caminho, eles passarão... \\Eu passarinho!}{\textit{Eu Passarinho \\ Mario Quintana}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\tableofcontents
+\newpage
+\listoffigures
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\section*{Resumo}
+
+    \begin{doublespace}
+        
+        \par Este relatório final de trabalho de conclusão de curso resume as atividades empreendidas no primeiro e segundo semestres de 2022, correspondendo ao período de atividades do aluno no seu Trabalho de Graduação das matérias "ES951 - Trabalho de Graduação I" e "ES952 - Trabalho de Graduação II". O projeto desenvolvido visa abordar o problema de segurança e monitoramento de sistemas embarcados em ambiente virtual, utilizando tecnologias modernas para a instrumentação do projeto aliadas ao sistema de simulação ROS2, aplicado à máquinas virtuais.
+
+    \end{doublespace}
+
+
+    \vfill  
+
+    \textbf{Keywords:} ROS2, virtualizing embedded systems, Docker, monitoring virtualized systems, Grafana, Prometheus, node\_exporter, 
+    systems monitoring instrumentation, ngrok.  
+    
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\justifying
+\section{Introdução}
+            
+    \par Sistemas embarcados da atualidade estão sujeitos a serem invadidos e utilizados de forma maliciosa, levando assim a uma preocupação que resultou em uma nova área de pesquisa que é constituída por técnicas de monitoramento e interpretação de dados para sua prevenção. Está sendo proposta aqui uma metodologia aplicada aos robôs industriais baseada na análise dos logs do sistema operacional associados ao comportamento apresentado pelos robôs respectivos.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Objetivos}
+            
+    \par O objetivo deste trabalho de graduação é o desenvolvimento de um sistema de monitoramento e segurança da operação de um sistema robótico, acompanhando sua integridade e funcionamento através de ferramentas de modelagem, análise e visualização do comportamento de sistemas embarcados. Aliado a isso, o desenvolvimento de um sistema de segurança à possíveis tentativas de invasão ao sistema.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\section{Fundamentação teórica}
+\subsection{ROS - Robot Operating System}
+    \par O Sistema Operacional para Robôs (ROS) é uma plataforma de simulação e desenvolvimento de sistemas embarcados, contendo os módulos necessários para a simulação de um robô, com os dispositivos de entrada e saída necessários para a interação com o mesmo.
+    
+    \par Tal sistema segue o protocolo Produtor/Consumidor (\textit{"Publisher/Subscriber"})\cite{protocoloMQTT}.Nesse protocolo um cliente envia mensagens diretamente a um \textit{broker} e outro cliente pode acessar essas informações se inscrevendo nesse intermediário. No ROS segue a mesma lógica: um módulo (chamado de "Nó") é responsável por publicar mensagens, informações, em um fluxo (chamado de "Tópico"). As mensagens no tópico podem ser acessadas por qualquer nó que tenha interesse por meio de uma subscrição. Portanto, se um tipo de mensagem for de interesse de algum nó, esse módulo em específico pode se inscrever nesse fluxo de mensagens. Esse protocolo difere do Cliente/Servidor, já que esse se vale da requisição da informação antes de ter a resposta com o conteúdo solicitado.
+    
+    \par Nesse trabalho tomamos como base a simulação do TurtleSim: um robô tartaruga simplificado que consegue se movimentar num ambiente 2D recebendo comandos de posição e velocidade linear e angular, enviando mensagens do seu status de operação, posicionamento na tela e controles de colisão. Abaixo, exemplos da simulação do TurtleSim na Figura \ref{fig:turtlesim} que possui aplicações práticas como o TurtleBot, Figura \ref{fig:turtlebot}, também executado sob plataforma ROS:
+    
+         \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.3]{images/turtlesim/example_turtlesim.png}
+            \caption{Turtlesim - Aplicação de sistemas embarcados baseados em ROS}
+            \label{fig:turtlesim}
+        \end{figure}
+        
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=1.2]{images/turtlesim/example_turtlebot.png}
+            \caption{Turtlebot - Aplicação prática de sistemas embarcados baseados em ROS}
+            \label{fig:turtlebot}
+        \end{figure}
+
+    \par No desenvolvimento desse trabalho foram utilizados alguns conceitos básicos do sistema ROS, sendo eles:
+        \begin{itemize}
+            \item Nó (\textit{Node}): é um módulo base do sistema ROS, responsável por simular um sistema embarcado ou então de simular sensores ou comandos; basicamente é um processo que executa métodos enviando mensagens de saída sobre o seu estado;
+            \item Tópico (\textit{Topic}): é o meio de comunicação entre os nós; é uma via de troca de mensagens entre nós distintos, podendo ser requisitado (assinado) pelos nós que tem interesse nessa via de comunicação;
+            \item Publicações (\textit{Publications}): é a saída de um nó para um tópico; um nó pode publicar mensagens em um tópico, como por exemplo o seu estado de execução, sendo essas mensagens algum tipo de estrutura de dados;
+            \item Inscrições (\textit{Subscriptions}): são os tópicos em que os nós se relacionam sem definir alguma tipagem de mensagem;
+            \item Serviços (\textit{Services}): são os serviços expostos de um no que podemos utilizar para interagir com o sistema embarcado, como por exemplo um serviço de controle de velocidade linear e angular, que pode ser utilizado para controlar o robô simulado.
+        \end{itemize}
+
+    \par Para o trabalho, o TurtleSim será o nó utilizado que está inscrito no tópico \textit{/turtle1/cmd\_vel} para receber mensagens de controle de posicionamento e velocidade linear e angular.
+
+\subsection{Docker}
+    \par Como indicado na documentação oficial do sistema \cite{docker}, Docker é um gerenciador de pacotes de produtos que se utiliza da virtualização do sistema operacional para provisionar todo o ferramental e dependências necessárias para uma aplicação. A virtualização criada pelo Docker é chamada de conteiner. Tal provisionamento da plataforma como serviço é chamado de PaaS \cite{PaaS}.
+
+\subsection{Grafana}
+    \par Grafana \cite{grafana} é um software \textit{open source} de monitoramento de dados, podendo ser utilizado para gestão de logs de operações bem como visualização de gráficos e suporte a pesquisas por querys numa base de logs. Há diversos modelos disponíveis podendo ser customizado livremente de acordo com a aplicação requerida. Nesse trabalho será utilizado para centralizar o monitoramento do sistema virtualizado, compilando indicadores do hardware utilizado (RaspberryPi) e status do funcionamento do robô (posicionamento na tela e indicadores de colisão).
+
+\subsection{OWASP ZAP}
+    \par O OWASP ZAP \cite{owaspzap} também é um software \textit{open source} utilizado para varrer endereços na web, conexões e comunicações entre sistemas buscando vulnerabilidades de serviços e falhas de segurança. Tal ferramenta gera status sobre o endereço e a aplicação submetida a testes, pontuando as falhas encontradas podendo ser utilizada para aprimorar a segurança da comunicação com o robô simulado.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\section{Metodologia}
+    \par Para o objetivo desse trabalho, a ideia base é de criar um ambiente virtualizado com a simulação de um sistema embarcado baseado no ROS e expor esse sistema a possíveis ataques, monitorando toda a aplicação utilizando o Grafana e criando estratégias de segurança e as validando por meio do OWASP ZAP. Sendo assim, analisamos na sequência a arquitetura geral do sistema.
+
+\subsection{Arquitetura Proposta}
+    \par Para o desenvolvimento do trabalho será desenvolvida a seguinte arquitetura do projeto:
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.5]{images/primary_module_draft.png}
+            \caption{Módulo Principal - Simulação Embarcada}
+            \label{fig:ros}
+        \end{figure}
+        
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.5]{images/secondary_module_draft.png}
+            \caption{Módulo Secundário - Validação de Segurança}
+            \label{fig:owasp}
+        \end{figure}
+    
+    \par Os módulo principal, detalhado na Figura \ref{fig:ros}, contém as seguintes especificações:
+    \begin{itemize}
+        \item \textit{Framework} ROS \cite{ros} com a simulação do Sistema Embarcado TurtleSim, simulando um robô responsivo a comandos de locomoção;
+        \item Monitoramento de métricas através de API para averiguação do funcionamento do sistema embarcado simulado;
+        \item Compilação e visualização das métricas pelo Grafana \cite{grafana}, como por exemplo a posição do robô e indicadores de colisão, bem como o status do hardware da simulação e os contêineres envolvidos;
+        \item Módulo de Segurança acoplado à simulação do sistema embarcado para garantir a segurança de seu funcionamento;
+        \item Endereço público de acesso à simulação do robô, permitindo interação com o mesmo para validação do Módulo de Segurança;
+    \end{itemize}
+    
+    \par Todos os módulos descritos serão virtualizados e provisionados separadamente em instâncias Docker \cite{docker}, para haver desacoplamento dos sistemas e comunicação entre os mesmo. Todo o sistema será provisionado na placa de desenvolvimento RaspberryPi \cite{rapberryPi}.
+    
+    \par Além do módulo principal, haverá um módulo secundário, indicado pela Figura \ref{fig:owasp}, de tentativa de explorar vulnerabilidades do módulo de segurança e de interferir no funcionamento do robô, fornecendo um relatório do sistema OWASP ZAP\cite{owaspzap} das vulnerabilidades encontradas. Tal módulo também será provisionado em RaspberryPi ou mesmo um computador secundário.
+    
+    \par O sistema tem como saída as métricas retiradas pelo Grafana e o relatório do módulo de segurança. Podendo aferir o comportamento do robô com tentativas de ataque ao sistema, avaliando como o Módulo de Segurança protegeu o sistema embarcado.
+
+\subsection{Virtualização do sistema embarcado}
+    \par Para a virtualização da simulação do nó TurtleSim do ROS, como indicado no repositório \cite{ros2_docker_examples} sobre "\textit{different ways to deal with ROS 2 node interconnectivity}", primeiramente é necessário instalar as dependências necessárias para o correto funcionamento da aplicação.
+    
+    \par Para a virtualização, foi necessário criar um arquivo Docker com a receita para a criação do conteiner com as dependências necessárias. Com tal arquivo para o provisionamento do ambiente, os passos a seguir foram executados no terminal:
+
+    \begin{enumerate}
+        \item Atualizar todas as dependências da máquina e instalar o sistema Docker:
+            \begin{minted}{bash}
+sudo apt-get update; sudo apt-get upgrade;
+
+sudo -E apt-get -y install apt-transport-https \
+ca-certificates software-properties-common && \
+
+curl -sL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - && \
+
+arch=$(dpkg --print-architecture) && \
+
+sudo -E add-apt-repository "deb [arch=${arch}] \
+https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" && \
+
+sudo -E apt-get update && \
+sudo -E apt-get -y install docker-ce docker-compose
+
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+            \end{minted}
+        \item Com as dependências atualizadas e instaladas, executamos o arquivo Docker para a criação do conteiner com o sistema ROS:
+            \begin{minted}{bash}
+sudo chmod +x eg1/ros_entrypoint.sh
+
+sudo docker build -t turtle_demo -f eg1/Dockerfile .
+
+xhost local:root
+            \end{minted}
+        \item A partir desse momento, executamos os módulos do ROS para a nossa simulação do sistema embarcado com o comando abaixo:
+        \begin{minted}{bash}
+sudo docker run --rm -it --env DISPLAY --volume /tmp/.X11-unix:/tmp/.X11-unix:rw \
+turtle_demo ros2 launch my_turtle_bringup turtlesim_demo.launch.py
+        \end{minted}
+    \end{enumerate}
+
+    \par A simulação abre uma janela em que mostra a execução do robô TurtleSim com a sua trajetória, como na Figura \ref{fig:trajetoriaTurtleSim01}. Podemos também interagir com o robô através do nó \textit{\textbf{/teleop\_turtle}} executado numa diferente janela do terminal, alterando a trajetória como na Figura \ref{fig:trajetoriaTurtleSim02} abaixo:
+        
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.5]{images/turtlesim/turtlesim_01.png}
+            \caption{Simulação ROS TurtleSim}
+            \label{fig:trajetoriaTurtleSim01}
+        \end{figure}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.5]{images/turtlesim/turtlesim_02.png}
+            \caption{Simulação ROS TurtleSim - trajetória alterada pelo nó \textit{\textbf{/teleop\_turtle}}}
+            \label{fig:trajetoriaTurtleSim02}
+        \end{figure}
+        
+    \par Com a execução da simulação acima, o robô fornece dados diretamente relacionados a sua execução e ao seu posicionamento na tela. Tais informações podem ser recolhidas inspecionando o tópico \textbf{\textit{/turtle1/cmd\_vel}}, que fornece as informações de velocidades linear e angular do robô, ou então acompanhando a saída da execução do comando de inicialização da simulação, que mantém o processo na janela do terminal gerando mensagens de histórico da execução da simulação. Na Figura \ref{fig:outputROS} abaixo, pode-se ver até que na saída indica quando o robô atingiu os limites virtuais da janela da simulação.
+    
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.4]{images/turtlesim/turtlesim_03.png}
+            \caption{Saída da simulação ROS}
+            \label{fig:outputROS}
+        \end{figure}
+
+\subsubsection{Arquitetura ROS}
+    \par Na virtualização do sistema ROS executamos os seguintes módulos para a nossa simulação do sistema embarcado:
+        \begin{enumerate}
+            \item Nó /turtlesim: robô tartaruga com os tópicos e subscrições necessárias para a operação, inscrito no tópico /turtle1/cmd\_vel para receber comandos de velocidade linear e angular;
+            \item Nó /move\_controler: responsável por executar comandos de velocidade angular e linear constantes para o robô, enviando comandos para o tópico /turtle1/cmd\_vel, mantendo o robô num percurso constante desenhando um círculo na tela;
+            \item Nó /color\_controler: responsável apenas por aplicar cores no trajeto do robô para melhor visualização;
+            \item Nó /teleop\_turtle: responsável por criar uma interação com as setas do teclado para controlar a trajetória do robô, publicando mensagens diretamente no tópico /turtle1/cmd\_vel.
+        \end{enumerate}
+    
+    \par Tais módulos podem ser verificados graficamente numa arquitetura detalhada indicando a virtualização do sistema ROS, através do módulo \textit{\textbf{rqt\_graph}}. Executando o comando abaixo para construir a arquitetura da simulação, temos como saída o diagrama da Figura \ref{fig:diagramaROS} que segue:
+
+        \begin{minted}{bash}
+sudo docker run --rm -it --env DISPLAY --volume /tmp/.X11-unix:/tmp/.X11-unix:rw \
+turtle_demo ros2 run rqt_graph rqt_graph
+        \end{minted}
+        
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.5]{images/turtlesim/turtlesim_04.png}
+            \caption{Arquitetura Virtualizada no ROS}
+            \label{fig:diagramaROS}
+        \end{figure}
+        
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.5]{images/turtlesim/turtlesim_05.png}
+            \caption{Arquitetura Virtualizada no ROS - Destaque aos Nós, Tópicos e Mensagens}
+            \label{fig:diagramaROS02}
+        \end{figure}
+        
+    \par Na Figura \ref{fig:diagramaROS02} acima, podemos ver destacado somente a estrutura de nós e tópicos do sistema ROS virtualizado. Nela, tanto o nó \textbf{\textit{/move\_controller}} quanto o nó \textbf{\textit{/telop\_turtle}} publicam mensagens no tópico \textbf{\textit{/turtle1/cmd\_vel}} em que o nó principal \textbf{\textit{/turtlesim}} se inscreve. Esses dois nós são os responsáveis por movimentar o robô tartaruga (sendo o primeiro responsável pelo movimento circular constante e o segundo por passar comandos das setas do teclado para o robô). O nó \textbf{\textit{/color\_controller}} não publica e nem se inscreve em nenhum tópico pois ele só é usado para colorir a trajetória na tela. O nó \textbf{\textit{/turtlesim}} publica mensagens referente a sua rotação na tela através dos tópicos \textbf{\textit{/rotate\_absolute}}.
+    
+    \par Na Figura \ref{fig:diagramaROS}, temos uma visão mais macro do processo em que o ponto de destaque é o escopo \textbf{\textit{/turtle1/rotate\_absolute}} referente aos comandos constantes que o nó \textbf{\textit{/move\_controller}} escreve no tópico \textbf{\textit{/turtle1/cmd\_vel}}, que faz com que o robô mantenha uma trajetória circular. O escopo geral da simulação é nomeado \textbf{\textit{/turtle1}}.
+    
+\subsection{Instrumentação do sistema de monitoramento}
+    \par Para o sistema de monitoramento, dividiremos as informações a serem monitoradas em dois grupos distintos:
+        \begin{itemize}
+            \item Sistema operacional: dados como uso de processamento de CPU, memória, tempo de execução do sistema, instâncias dockers virtualizadas, dentre outros dados úteis da máquina e sistema operacional que suporta a simulação;
+            \item Simulação do sistema embarcado em ROS: dados relacionados ao funcionamento do robô, trajetória, problemas na simulação;
+        \end{itemize}
+    \par Para a centralização dos monitoramento da simulação, utilizaremos o Grafana como um agregador de todas nas fontes de informação do sistema. Para ingestão de dados ao Grafana, utilizaremos o Prometheus integrado ao \textit{node-exporter} e o \textit{Pushgateway}.
+
+\subsubsection{Monitoramento do sistema operacional: node-exporter}
+    \par O \textit{node-exporter} \cite{node_exporter} é uma aplicação para expor métricas de hardware e do kernel do sistema operacional, como memória disponível do sistema, uso dos núcleos do processador, tempo de disponibilidade do sistema, entre outras. A vantagem dessa aplicação é de se integrar facilmente a uma das bases de dado do Grafana, o Prometheus.
+    \par Para instalarmos o \textit{node-exporter}, seguimos a documentação oficial da integração com o Prometheus \cite{prometheus_node_exporter}, com o pacote da aplicação disponibilizado no site:
+        \begin{minted}{bash}
+wget https://\
+github.com/prometheus/node_exporter/releases/download/v*/node_exporter-*.*-amd64.tar.gz
+
+tar xvfz node_exporter-*.*-amd64.tar.gz
+        \end{minted}
+    \par Entrando na pasta do \textit{node-exporter}, executamos o binário:
+        \begin{minted}{bash}
+./node_exporter
+        \end{minted}
+    \par Com a aplicação sendo executada, no terminal temos alguns logs das métricas sendo coletadas, como mostrado na Figura \ref{fig:terminalNodeExporter} abaixo:
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.7]{images/node_exporter/terminal_node_exporter.png}
+            \caption{Saída execução node\_exporter}
+            \label{fig:terminalNodeExporter}
+        \end{figure}
+    \par E ao acessarmos o endereço local na porta 9100 ( http://localhost:9100/metrics ), vemos as métricas do sistema expostas pelo \textit{node\_exporter}:
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.6]{images/node_exporter/browser_node_exporter.png}
+            \caption{Porta local exposta com as métricas do node\_exporter}
+            \label{fig:browserNodeExporter}
+        \end{figure}
+
+\subsubsection{Monitoramento da simulação ROS: Pushgateway e Node.js}
+    \par Para o monitoramento da operação do robô simulado no ROS na instância Docker, como o sistema não possui uma integração simplificada com o Grafana, ou com outra visualização de integrações de métricas, ou até mesmo alguma porta exposta para requisições \textit{GET} para obter o estado do sistema, temos que instrumentar uma aplicação baseada nos comandos já existentes do ROS.
+    \par Partindo da análise do tópico de comunicação entre o nó \textit{/move\_controller} com o nó do robô \textit{/turtlesim}, podemos inspecionar os comandos de movimentação do robô, que indicam a sua atual posição. Rodando o comando abaixo no terminal a partir da instância Docker do turtlesim, obtemos sua atual posição e redirecionamos esse registro para um arquivo de log \textbf{position.txt} que trataremos posteriormente:
+        \begin{minted}{bash}
+sudo docker run --rm -it --env DISPLAY \
+--volume /tmp/.X11-unix:/tmp/.X11-unix:rw turtle_demo \
+ros2 topic echo /turtle1/pose >> position.txt
+        \end{minted}
+    \par Nos fornecendo os registros da posição do robô abaixo:
+        \begin{itemize}
+            \item x: posição do robô no eixo x;
+            \item y: posição do robô no eixo y;
+            \item theta: ângulo da trajetória do robô referente ao plano da simulação;
+            \item linear\_velocity: velocidade linear de operação constante;
+            \item angular\_velocity: velocidade angular de operação constante
+        \end{itemize}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.6]{images/pushgateway/current_position_terminal.png}
+            \caption{Registro de logs do tópico /turtle1/pose indicando a posição e velocidade atual do robô simulado}
+            \label{fig:positionTopicLogs}
+        \end{figure}
+    \par Além de buscarmos informações sobre a posição do robô, queremos identificar a saúde da sua operação, podendo identificar falhas ou então colisões nas limitações da simulação. Para isso, usaremos a mesma estratégia: na execução do comando de início da simulação, redirecionaremos os registros para um arquivo centralizado de logs \textbf{output.txt}, que listará a saída da simulação como indicado na Figura \ref{fig:outputROS}.
+    \par Com esses dois arquivos de texto nos fornecendo em tempo real os registros da saúde da operação do sistema do robô simulado, bem como a sua posição e velocidade, criamos uma aplicação local em Node.js \cite{nodejs} que constantemente ingere os dados desses arquivos e utiliza o Prometheus Pushgateway \cite{prometheus_pushgateway} para disponibilizar os dados para o Grafana.
+    \par O Pushgateway é uma aplicação nativa do Prometheus que serve para expor endpoints locais para qualquer aplicação poder inserir, deletar ou consultar métricas. Para o seu provisionamento no sistema, foi utilizado a documentação oficial citada acima, que cria uma instância Docker e disponibiliza o Pushgateway na porta local 9091 ( http://localhost:9091/ ), como na Figura \ref{fig:browserPushgateway} abaixo:
+        \begin{minted}{bash}
+docker pull prom/pushgateway
+docker run -d -p 9091:9091 prom/pushgateway
+        \end{minted}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.6]{images/pushgateway/browser_pushgateway.png}
+            \caption{Instância do Pushgateway com as métricas expostas localmente}
+            \label{fig:browserPushgateway}
+        \end{figure}
+    \par Assim, nosso sistema Node.js vasculha os arquivos \textbf{output.txt} e \textbf{position.txt} enviando esses dados via requisição POST API, utilizando o pacote \textit{npm} axios \cite{axios} para a requisição:
+        \begin{minted}{javascript}
+await axios({
+    method: 'post',
+    url: `${PUSHGATEWAY_INSTANCE}/job/${job}/instance/${instance}`,
+    data,
+});
+        \end{minted}
+    \par Na requisição acima, comparada a Figura \ref{fig:browserPushgateway}, pode-se perceber que nas métricas inseridas no Pushgateway podemos definir um nome para o serviço/aplicação (\textit{job}) e dividir em instâncias (\textit{instances}), incluindo também marcadores nas métricas para serem mais facilmente identificadas.
+    \par Para a aplicação Node.js conseguir observar os arquivos de saída da simulação, foi usado o \textit{watchFile} \cite{watchfile}, uma funcionalidade do Node.js de criar um \textit{listener} para arquivos e notificar sempre que o arquivo tiver alguma alteração, trazendo consigo os dados referentes a essa atualização. Essa funcionalidade foi utilizada de maneira simplificada através do módulo \textit{npm Tail} \cite{tail}, bastando apenas passarmos o caminho do arquivo que se deseja criar esse \textit{observer} e como resposta obtemos as linhas que foram inseridas nesse arquivo.
+
+\subsubsection{Agregando as métricas e monitorando o sistema: Grafana e Prometheus}
+    \par Com as duas fontes de métricas configuradas (\textit{node\_exporter} e Pushgateway), podemos instanciar o Prometheus para integrar essas métricas como um centralizador e as disponibilizar ao Grafana. Seguindo a documentação oficial para essa integração \cite{prometheus_node_exporter}:
+        \begin{minted}{bash}
+wget \
+https://github.com/prometheus/prometheus/releases/download/v*/prometheus-*.*-amd64.tar.gz
+
+tar xvf prometheus-*.*-amd64.tar.gz
+        \end{minted}
+    \par E executando o utilitário:
+        \begin{minted}{bash}
+./prometheus --config.file=./prometheus.yml
+        \end{minted}
+    \par Ao acessarmos localmente o endereço 9090 ( http://localhost:9090 ), podemos ver a aplicação do Prometheus e já criar consultas (\textit{queries}) para pesquisar as métricas no nosso banco de dados instrumentado:
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.5]{images/prometheus/browser_prometheus.png}
+            \caption{Instância do Prometheus executando uma querie de pesquisa no banco de dados de métricas instrumentado}
+            \label{fig:browserPrometheus}
+        \end{figure}
+    \par Com nossas métricas e banco de dados funcionais, podemos criar agora o visualizador integrado do sistema, utilizando o Grafana. Com a documentação oficial do software \cite{grafana}, tomando como base o monitoramento de sistemas virtualizados, disponível no site oficial da plataforma \cite{GrafanaSystemMonitoring}, executamos uma instância com o comando abaixo:
+        \begin{minted}{bash}
+docker run -d --name=grafana \
+--restart always \
+-p 3000:3000 \
+-e "GF_SERVER_PROTOCOL=http" \
+-e "GF_SERVER_HTTP_PORT=3000" \
+-v /docker/grafana/data:/var/lib/grafana \
+grafana/grafana
+        \end{minted}
+        
+    \par Tal comando inicializa uma instância conteiner com o Grafana virtualizado na porta 3000 do dispositivo local, podendo ser acessado como na Figura \ref{fig:grafanaLocalhost} abaixo:    
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.5]{images/grafana/grafana01.png}
+            \caption{Instância Grafana em localhost}
+            \label{fig:grafanaLocalhost}
+        \end{figure}
+    \par Configurando no Grafana a instância do Prometheus como fonte de dados como na Figura \ref{fig:grafanaPrometheus}, podemos criar queries para criar os quadros de dashboard na aplicação, como abaixo:
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.6]{images/grafana/prometheus_datasorce.png}
+            \caption{Grafana - Configuração do Prometheus como datasource no Granafa}
+            \label{fig:grafanaPrometheus}
+        \end{figure}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.5]{images/grafana/metricas_grafana.png}
+            \caption{Grafana - Dashboards das métricas do sistema}
+            \label{fig:grafanaMetricas}
+        \end{figure}
+
+\subsubsection{Construção das métricas e interpretação dos gráficos}
+    \par Para o monitoramento proposto, no Grafana olhamos para os seguintes grupos de métricas:
+    \begin{itemize}
+        \item node\_memory\_MemAvailable\_bytes: métrica direta do node\_exporter indicando a memória disponível do sistema em bytes;
+        \item node\_cpu\_seconds\_total: métrica direta do node\_exporter que trás o processamento dos cores da CPU do sistema;
+        \item x\_position e y\_position: métricas customizadas enviadas pela aplicação Node.js ao Pushgateway e Prometheus, indicando a posição x e y do robô;
+        \item angular\_velocity e linear\_velocity: métricas customizadas enviadas pela aplicação Node.js ao Pushgateway e Prometheus, indicando a velocidade linear e angular do robô;
+        \item start\{exported\_job="turtlesim"\}: métrica customizada enviada pela aplicação Node.js ao Pushgateway e Prometheus, indicando o início da operação do robô;
+        \item colision\{exported\_job="turtlesim"\}: métrica customizada enviada pela aplicação Node.js ao Pushgateway e Prometheus, indicando quando o robô sofre alguma colisão na simulação;
+    \end{itemize}
+
+    \par Na Figura \ref{fig:grafanaPosicao} abaixo, podemos ver o dashboard do Grafana das posições x e y do robô operando a um tempo na sua trajetória constante, sem interrupções:
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.5]{images/grafana/positions_dashboard_grafana.png}
+            \caption{Grafana - Dashboard de posição do robô}
+            \label{fig:grafanaPosicao}
+        \end{figure}
+
+\subsubsection{Arquitetura e versionamento do projeto}
+    \par Como resultado das aplicações descritas acima, temos a seguinte arquitetura do sistema:
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.48]{images/final_architecture.png}
+            \caption{Arquitetura Final - Integrações entre o ROS e as aplicações de monitoramento}
+            \label{fig:arqFinal}
+        \end{figure}
+
+    \par Todo o código desenvolvido para a aplicação, bem como o passo-a-passo para a execução do experimento está versionado no GitHub desse projeto \cite{githubVitaoCs}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Externalização do sistema}
+    \par Para um sistema de monitoramento de um sistema embarcado é interessante tornar os resultados do monitoramento do sistema disponíveis externamente, sem serem acessados apenas nas instâncias locais (http://localhost:3000/) da rede que está sendo executado o experimento.
+    \par Para isso, é possível utilizar aplicações como o \textit{ngrok} \cite{ngrok}, que é capaz de externalizar suas instâncias localhost para um endereço público na internet, podendo configurar autenticação para o endereço ou então limitar por IP.
+    \par Alternativas como o \textit{ngrok}, que já funcionam de forma simples, ou então instrumentando um endereço público para a internet utilizando uma instância \textit{nginx} \cite{nginx} com endereços privados de IP configurados direto no roteador, para expor o localhost. Tais possibilidades são viáveis para fazer com que um sistema embarcado e o seu monitoramento possam ser acessados de endereços web.
+    \par Dessa forma, instalango o \textit{ngrok} globalmente para a nossa aplicação, com o comando abaixo, foi possível acessar o monitoramento do sistema a partir de qualquer rede, utilizando um login e senha configurado, como ilustrada na Figuras \ref{fig:ngrokGrafana}:
+        \begin{minted}{bash}
+sudo snap install ngrok
+        \end{minted}
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.48]{images/ngrok/ngrok_init.png}
+            \caption{NGROK - Tela inicial}
+            \label{fig:ngrokIniti}
+        \end{figure}
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.48]{images/ngrok/ngrok_logs.png}
+            \caption{NGROK - Logs quando a aplicação é acessada}
+            \label{fig:ngrokLogs}
+        \end{figure}
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.48]{images/ngrok/ngrok_grafana.png}
+            \caption{NGROK - Grafana disponibilizado pela aplicação}
+            \label{fig:ngrokGrafana}
+        \end{figure}
+
+    \par Na Figura \ref{fig:ngrokIniti} temos a primeira tela do NGROK, que fica disponível localmente no endereço \\http://127.0.0.1:4040/inspect/. No momento em que a aplicação é acessada, como na Figura \ref{fig:ngrokLogs} temos todo o histórico de logs de acesso ao sistema de monitoramento, nos fornecendo mais informações sobre o sistema bem como aumentando a segurança, já que através do \textit{ngrok} é possível limitar o acesso por autenticação ou séries de endereços públicos (IPs).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Segurança}
+    \par Além da segurança estabelecida no sistema de monitoramente pela segurança de login/senha e limitações de endereço de IP utilizando o \textit{ngrok} ou como alternativa o \textit{nginx}, podemos também avaliar a segurança do nosso código rodando testes no nível:
+        \begin{itemize}
+            \item Vulnerabilidades de código no projeto: com aplicações como o \textit{Horusec} \cite{horusec} é possível verificar problemas de segurança nos módulos de dependência utilizados no nosso sistema, bem como padrões de codificação que poderiam ter alguma possibilidade de causar uma falha de segurança no sistema. Como estamos expondo um endereço para a web, qualquer problema do código ou algum módulo que expõem alguma falha de segurança, pode causar problemas para o nosso sistema ou até ser uma porte de acesso a \textit{malwares} para a nossa máquina; 
+            \item Vulnerabilidades nos endereços externalizados: tendo uma porta localhost exposta a um endereço web pode criar acessos a possíveis ameaças a integridade da nossa aplicação ou até mesmo a máquina que está a executando, com aplicações como \textit{OwaspZap} \cite{owaspzap} podemos passar a URL externalizada pelo \textit{ngrok} e fazer um diagnóstico da aplicação.
+        \end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Resultados finais e conclusões}
+
+    \par O experimento se apresentou viável e escalável, já que outros tópicos do \textit{ROS2} poderiam ser utilizados para se obter mais dados da simulação e também outros nós poderiam ser utilizados na simulação.
+
+    \par Quanto ao sistema de monitoramento instrumentado, com a estrutura final indicada pela Figura \ref{fig:arqFinalResult} abaixo, foi possível acessar os dados até mesmo fora da rede da aplicação, se mostrando uma conexão segura, devido as camadas de autenticação envolvidas, e também confiável, pela atualização quase que instantânea dos logs do robô, graças ao uso de tecnologias novas no mercado aliado ao sistema já estabelecido no mercado como o ROS.
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.40]{images/final_architecture_with_ngrok.png}
+            \caption{Resultados Finais - Arquitetura Final - Integrações entre o ROS e as aplicações de monitoramento externalizadas em uma URL pública pelo NGROK}
+            \label{fig:arqFinalResult}
+        \end{figure}
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.40]{images/grafana/final_grafana02.png}
+            \caption{Resultados Finais - Grafana - Logs da simulação ROS}
+            \label{fig:grafanaFinal02}
+        \end{figure}
+        
+       \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.40]{images/grafana/final_grafana01.png}
+            \caption{Resultados Finais - Grafana - Logs da performance do RaspberryPi}
+            \label{fig:grafanaFinal01}
+        \end{figure}
+
+    \par Nos dashboards da Figura \ref{fig:grafanaFinal02} podemos ver todos os pontos em que o robô atingiu o limite da simulação e a sua posição, bem como o início do sistema e também a velocidade do robô. Utilizando outros nós do ROS é possível manipular a trajetória e gerar interferências nas velocidades e posições do robô, como indicado no dashboard na figura indicada. Tais informações, aliado por exemplo a um controlador, poderia ser utilizado para correção da trajetória, similar a uma correção de trajetória para um robô seguidor de linha. Assim, o sistema se mostrou escalável, podendo ser aplicado a outros contextos. Nos dashboards da Figura \ref{fig:grafanaFinal01} temos o uso de memória e processamento do sistema.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\section{Anexos}
+Todos os scripts da aplicação, incluindo os scripts abaixo para executar e desligar o experimento e o repositório para desenvolver esse trabalho estão versionados no GitHub do projeto \textit{unicamp-final-paper} \cite{githubVitaoCs}
+\subsection{Script para execução do sistema}
+    \begin{minted}{bash}
+        #!/bin/bash
+
+        # Cleaning ros2_docker_examples repository
+        cd apps/ros2_docker_examples/
+        rm output.txt
+        rm position.txt
+        touch output.txt
+        touch position.txt
+        
+        # Execute node_exporter
+        cd ../node_exporter/
+        nohup ./node_exporter &
+        
+        # Execute Prometheus
+        cd ../prometheus/
+        nohup ./prometheus --config.file=./prometheus.yml &
+        
+        # Execute Pushgateway
+        docker run -d --name pushgateway -p 9091:9091 prom/pushgateway
+        
+        # Init node app with file tails and ngrok
+        cd ../../
+        node index.js &
+        
+        echo -e "[Start Script] Start script done!"
+    \end{minted}
+\newpage
+\subsection{Script para desligar o sistema}
+    \begin{minted}{bash}
+        #!/bin/bash
+
+        # Saerching for PID process
+        PROCESS=($(ps -ef | grep -i index.js | awk '{print $2}'))
+        PROCESS+=($(ps -ef | grep -i prometheus | awk '{print $2}'))
+        PROCESS+=($(ps -ef | grep -i node_exporter | awk '{print $2}'))
+        
+        for processPID in "${PROCESS[@]}"
+        do
+            echo -e "[Stop Script] Killing process: $processPID" 
+            kill -9 $processPID
+        done
+        
+        DOCKER=($(docker ps -aqf "name=pushgateway"))
+        for containerId in "${DOCKER[@]}"
+        do
+            echo -e "[Stop Script] Stoping docker container id: $containerId"
+            docker stop $containerId
+        done
+        
+        docker rm pushgateway
+        
+        echo -e "[Stop Script] Stop script done!"
+    \end{minted}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\section{Referências bibliográficas}
+\printbibliography
+\nocite{cursoUniversidadeVirginia}
+\nocite{ataqueIOT}
+\nocite{podman}
+\nocite{prometheus}
+\nocite{trabalhoROS1}
+\nocite{trabalhoROS2}
+\nocite{trabalhoROS3}
+
+\end{document}
+
+

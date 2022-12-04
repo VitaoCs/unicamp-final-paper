@@ -16,10 +16,13 @@
     - [Run metrics crawler](#run-metrics-crawler)
     - [Run ROS simulation](#run-ros-simulation)
   - [Stopping the experiment](#stopping-the-experiment)
+  - [Authors](#authors)
 
 ## Overview
 
-This is my final paper for my graduation on Control and Automation Engineering at UNICAMP, with the purpose of developing a virtual environment for a robot embedded system with monitor and security strategies.
+This is my final paper for my graduation on Control and Automation Engineering at UNICAMP, with the purpose of developing a virtual environment for a robot embedded system with monitor and security strategies, the archtecture developed is below:
+
+![Project Architecture](./images/final_architecture_with_ngrok.png)
 
 ## Initial Configuration
 
@@ -193,3 +196,7 @@ Enter on the root of this repository `./` and execute the bash script below:
 ```bash
 ./stop.sh
 ```
+
+# Authors
+
+* **Victor Cintra Santos** - *VitaoCs* - [GitHub](https://github.com/VitaoCs)
