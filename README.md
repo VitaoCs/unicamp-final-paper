@@ -10,9 +10,12 @@
     - [Install Prometheus, Node-Exporter and Pushgateway](#install-prometheus-node-exporter-and-pushgateway)
     - [Install Grafana](#install-grafana)
     - [Install NGROK](#install-ngrok)
+    - [Setup Grafana Dashboard](#setup-grafana-dashboard)
+    - [Setup bash scripts](#setup-bash-scripts)
   - [Executing the experiment](#executing-the-experiment)
-    - [Run ROS simulation](#run-ros-simulation)
     - [Run metrics crawler](#run-metrics-crawler)
+    - [Run ROS simulation](#run-ros-simulation)
+  - [Stopping the experiment](#stopping-the-experiment)
 
 ## Overview
 
@@ -93,7 +96,7 @@ To install Prometheus, run:
     cd prometheus-*.*
 ```
 
-And configure your `prometheus.yml` file with the following configurations:
+And configure your `prometheus.yml` file with the following configurations (you can copy the file from `./templates/prometheus.yml`):
 
 ```javascript
 global:
@@ -138,7 +141,7 @@ sudo systemctl status grafana-server
 
 ### Install NGROK
 
-Install ngrok dependency globally to be used on this project. Follow the steps to configure in []()
+Install ngrok dependency globally to be used on this project. Follow the steps to configure in [NGROK Documentation](https://ngrok.com/)
 
 ```bash
 sudo snap install ngrok
@@ -148,7 +151,26 @@ sudo snap install ngrok
 
 Import the Grafana dashboard for this experience from `./grafana/dashboard.json`
 
+### Setup bash scripts
+
+GIve the necessary permition for the bash scripts to init and stop the experiment, run on the root of this repository:
+
+```bash
+chmod +x start.sh
+chmod +x stop.sh
+```
+
 ## Executing the experiment
+
+### Run metrics crawler
+
+Enter on the root of this repository `./` and execute the index file to retrieve the custom metrics of thr ROS simulation:
+
+```bash
+./start.sh
+```
+
+This app also expose an external URL to be accessed outside your network (localhost). You NGROK data would be availible on <http://127.0.0.1:4040/inspect/http>
 
 ### Run ROS simulation
 
@@ -164,12 +186,10 @@ In another terminal window, to retrieve the simulated robot position, run:
 sudo docker run --rm -it --env DISPLAY --volume /tmp/.X11-unix:/tmp/.X11-unix:rw turtle_demo ros2 topic echo /turtle1/pose >> position.txt
 ```
 
-### Run metrics crawler
+## Stopping the experiment
 
-Enter on the root of this repository `./` and execute the index file to retrive the custom metrics of thr ROS simulation:
+Enter on the root of this repository `./` and execute the bash script below:
 
 ```bash
-node index.js
+./stop.sh
 ```
-
-This app also expose an external URL to be accessed outside your network (localhost). You NGROK data would be availible on <http://127.0.0.1:4040/inspect/http>
